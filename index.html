@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Portal | SRS Mini Project</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#e11d48',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Top Announcement Bar / Academic Info Banner -->
+    <div class="bg-slate-900 text-white text-xs md:text-sm py-2 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-brand-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">SRS Mini Project</span>
+                <span class="text-slate-300">Blood Donation Web Application (HTML5 / CSS3 / JS)</span>
+            </div>
+            <div class="flex items-center gap-4 text-slate-300">
+                <span><i class="fa-solid fa-user-graduate text-brand-500 mr-1"></i> HARINI.V</span>
+                <span><i class="fa-solid fa-id-card text-brand-500 mr-1"></i> 111726115017</span>
+                <span class="hidden sm:inline"><i class="fa-solid fa-microchip text-brand-500 mr-1"></i> ECE (VLSI & DT) - I YEAR</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-droplet text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1">
+                            Life<span class="text-brand-600">Flow</span>
+                        </span>
+                        <p class="text-[11px] text-slate-500 font-medium tracking-wide">CONNECTING DONORS, SAVING LIVES</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Tabs -->
+                <nav class="hidden md:flex items-center gap-1">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all text-brand-600 bg-brand-50">
+                        <i class="fa-solid fa-house mr-1.5"></i> Home
+                    </button>
+                    <button onclick="switchTab('about')" id="nav-about" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-circle-info mr-1.5"></i> About
+                    </button>
+                    <button onclick="switchTab('donor')" id="nav-donor" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-hand-holding-medical mr-1.5"></i> Donor Register
+                    </button>
+                    <button onclick="switchTab('request')" id="nav-request" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-notes-medical mr-1.5"></i> Request Blood
+                    </button>
+                    <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-address-book mr-1.5"></i> Contact
+                    </button>
+                    <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn ml-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100 transition-all">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Admin Demo
+                    </button>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden lg:flex items-center gap-3">
+                    <button onclick="switchTab('request')" class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-truck-medical"></i> Emergency Request
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-slate-600 hover:text-brand-600 p-2 rounded-lg focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('home')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-house text-brand-600 w-5"></i> Home
+            </button>
+            <button onclick="switchTab('about')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-brand-600 w-5"></i> About Donation
+            </button>
+            <button onclick="switchTab('donor')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-medical text-brand-600 w-5"></i> Donor Registration
+            </button>
+            <button onclick="switchTab('request')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-notes-medical text-brand-600 w-5"></i> Blood Request
+            </button>
+            <button onclick="switchTab('contact')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-address-book text-brand-600 w-5"></i> Contact Us
+            </button>
+            <button onclick="switchTab('admin')" class="w-full text-left px-3 py-2.5 rounded-lg font-medium text-amber-800 bg-amber-50 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-amber-600 w-5"></i> Admin Dashboard (Demo)
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow">
+
+        <!-- ================= 1. HOME MODULE ================= -->
+        <section id="tab-home" class="tab-content active">
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 text-white overflow-hidden py-16 md:py-24">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e11d48_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <span class="inline-flex items-center gap-2 bg-brand-500/20 text-brand-300 border border-brand-500/40 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                                <i class="fa-solid fa-heart-pulse text-brand-500 animate-bounce"></i> Save Up To 3 Lives With Every Donation
+                            </span>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                                Donate Blood, <br class="hidden sm:inline"/>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-200">Gift A Second Chance</span>
+                            </h1>
+                            <p class="text-slate-300 text-base sm:text-lg max-w-2xl font-light">
+                                LifeFlow bridges the critical gap between voluntary blood donors and hospitals or patients in urgent need. Register today and become a real-life superhero.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                                <button onclick="switchTab('donor')" class="px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-500 font-bold text-white shadow-xl shadow-brand-600/30 transition-all flex items-center justify-center gap-3 group text-base">
+                                    <span>Register as Donor</span>
+                                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                                <button onclick="switchTab('request')" class="px-8 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold border border-slate-700 transition-all flex items-center justify-center gap-2 text-base">
+                                    <i class="fa-solid fa-hand-holding-heart text-brand-400"></i> Request Blood
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Stats & Blood Group Visual Widget -->
+                        <div class="lg:col-span-5">
+                            <div class="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl space-y-6">
+                                <h3 class="text-lg font-bold text-white flex items-center justify-between border-b border-white/10 pb-4">
+                                    <span>Quick Blood Groups</span>
+                                    <span class="text-xs font-normal text-slate-300">Available Donors Ready</span>
+                                </h3>
+                                <div class="grid grid-cols-4 gap-3 text-center">
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('A+')">
+                                        <div class="text-2xl font-black text-brand-400">A+</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">42 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('B+')">
+                                        <div class="text-2xl font-black text-brand-400">B+</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">58 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('O+')">
+                                        <div class="text-2xl font-black text-brand-400">O+</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">89 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('AB+')">
+                                        <div class="text-2xl font-black text-brand-400">AB+</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">24 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('A-')">
+                                        <div class="text-2xl font-black text-rose-300">A-</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">15 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('B-')">
+                                        <div class="text-2xl font-black text-rose-300">B-</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">12 Donors</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('O-')">
+                                        <div class="text-2xl font-black text-amber-400">O-</div>
+                                        <div class="text-[10px] text-amber-200 font-medium mt-1">Universal</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-500 transition-all cursor-pointer" onclick="filterDonorByGroup('AB-')">
+                                        <div class="text-2xl font-black text-rose-300">AB-</div>
+                                        <div class="text-[10px] text-slate-300 mt-1">8 Donors</div>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-500/20 rounded-xl p-3 text-xs text-brand-200 flex items-center gap-3">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base"></i>
+                                    <span>High Demand Alert: <strong>O-Negative</strong> & <strong>B-Positive</strong> needed in Chennai Central region.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="bg-white border-b border-slate-200 py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                        <div class="space-y-1">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-brand-600">1,250+</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium uppercase tracking-wider">Registered Donors</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-slate-900">3,400+</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium uppercase tracking-wider">Lives Saved</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-brand-600">180+</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium uppercase tracking-wider">Partner Hospitals</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-slate-900">15 Mins</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium uppercase tracking-wider">Avg Donation Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donation Facts & Awareness Cards -->
+            <div class="py-16 bg-slate-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Why Donate Blood?</h2>
+                        <p class="text-slate-600">Blood cannot be manufactured synthetically. It can only come from generous voluntary donors like you.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+                            <div class="w-14 h-14 rounded-xl bg-red-100 text-brand-600 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-heart-circle-check"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900">Saves Multiple Lives</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                A single pint of blood can be separated into red cells, plasma, and platelets, which can help save up to three different patients undergoing surgery, trauma recovery, or cancer care.
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+                            <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-notes-medical"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900">Health Checkup</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Prior to donating, your pulse, blood pressure, body temperature, and hemoglobin levels are checked for free. It gives you immediate insights into your cardiovascular health.
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4">
+                            <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-arrows-spin"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900">Stimulates Blood Cell Production</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                After blood donation, your body works to replenish the lost blood volume with fresh red blood cells within weeks, helping maintain vital overall organ function.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Emergency Requests Showcase Banner -->
+            <div class="bg-white py-12 border-t border-slate-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-red-600 animate-ping"></span>
+                                Active Emergency Blood Requests
+                            </h3>
+                            <p class="text-slate-500 text-sm">Real-time requests needing urgent donor response</p>
+                        </div>
+                        <button onclick="switchTab('request')" class="text-brand-600 font-semibold hover:underline text-sm flex items-center gap-1">
+                            Post New Request <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-requests-preview">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. ABOUT MODULE ================= -->
+        <section id="tab-about" class="tab-content">
+            <div class="bg-gradient-to-b from-slate-900 to-slate-800 text-white py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold">About Blood Donation</h1>
+                    <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
+                        Understanding eligibility, blood group compatibility, and the vital role blood donors play in emergency healthcare.
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+                <!-- Eligibility Criteria Grid -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+                        <i class="fa-solid fa-clipboard-check text-brand-600"></i>
+                        Donor Eligibility Criteria
+                    </h2>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                            <div class="text-brand-600 font-bold text-lg"><i class="fa-solid fa-cake-candles mr-2"></i>Age</div>
+                            <p class="text-slate-700 font-medium">18 to 65 years old</p>
+                            <p class="text-slate-500 text-xs">First-time donors must be under 60 years of age.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                            <div class="text-brand-600 font-bold text-lg"><i class="fa-solid fa-weight-scale mr-2"></i>Weight</div>
+                            <p class="text-slate-700 font-medium">Minimum 45 kg (100 lbs)</p>
+                            <p class="text-slate-500 text-xs">Ensures safe volume removal relative to body mass.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                            <div class="text-brand-600 font-bold text-lg"><i class="fa-solid fa-vial mr-2"></i>Hemoglobin</div>
+                            <p class="text-slate-700 font-medium">Minimum 12.5 g/dL</p>
+                            <p class="text-slate-500 text-xs">Quick preliminary finger-prick test conducted onsite.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                            <div class="text-brand-600 font-bold text-lg"><i class="fa-solid fa-calendar-days mr-2"></i>Frequency</div>
+                            <p class="text-slate-700 font-medium">Every 3 Months</p>
+                            <p class="text-slate-500 text-xs">90 days gap required between whole blood donations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blood Group Compatibility Matrix -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+                            <i class="fa-solid fa-table-cells text-brand-600"></i>
+                            Blood Group Compatibility Matrix
+                        </h2>
+                        <p class="text-slate-500 text-sm mt-1">Check who can receive blood from whom before requesting or donating.</p>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-700">
+                                    <th class="p-3">Blood Type</th>
+                                    <th class="p-3">Can Donate To</th>
+                                    <th class="p-3">Can Receive From</th>
+                                    <th class="p-3">Special Classification</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-sm">
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">O Negative (O-)</td>
+                                    <td class="p-3">Everyone (All Blood Types)</td>
+                                    <td class="p-3 font-medium text-slate-800">O- Only</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-amber-100 text-amber-800 text-xs font-bold">Universal Red Cell Donor</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">O Positive (O+)</td>
+                                    <td class="p-3">O+, A+, B+, AB+</td>
+                                    <td class="p-3 font-medium text-slate-800">O+, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">Most Common Type</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">A Positive (A+)</td>
+                                    <td class="p-3">A+, AB+</td>
+                                    <td class="p-3 font-medium text-slate-800">A+, A-, O+, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">High Demand</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">A Negative (A-)</td>
+                                    <td class="p-3">A+, A-, AB+, AB-</td>
+                                    <td class="p-3 font-medium text-slate-800">A-, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">Rare Type</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">B Positive (B+)</td>
+                                    <td class="p-3">B+, AB+</td>
+                                    <td class="p-3 font-medium text-slate-800">B+, B-, O+, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">Common Type</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">B Negative (B-)</td>
+                                    <td class="p-3">B+, B-, AB+, AB-</td>
+                                    <td class="p-3 font-medium text-slate-800">B-, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">Rare Type</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">AB Positive (AB+)</td>
+                                    <td class="p-3">AB+ Only</td>
+                                    <td class="p-3 font-medium text-slate-800">Everyone (All Blood Types)</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-xs font-bold">Universal Recipient</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-brand-600">AB Negative (AB-)</td>
+                                    <td class="p-3">AB+, AB-</td>
+                                    <td class="p-3 font-medium text-slate-800">AB-, A-, B-, O-</td>
+                                    <td class="p-3"><span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-xs font-medium">Rarest Type</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4 Steps Donation Process -->
+                <div class="space-y-6">
+                    <h2 class="text-2xl font-bold text-slate-900 text-center">Simple 4-Step Donation Process</h2>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center space-y-3">
+                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto">1</div>
+                            <h4 class="font-bold text-slate-900">Registration</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Fill out basic personal and health profile details on our online form or center.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center space-y-3">
+                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto">2</div>
+                            <h4 class="font-bold text-slate-900">Mini-Health Check</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Brief screening of pulse, blood pressure, temperature, and hemoglobin level.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center space-y-3">
+                            <div class="w-12 h-12 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto">3</div>
+                            <h4 class="font-bold text-slate-900">The Donation</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Takes only 8-10 minutes under sterilized medical supervision.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center space-y-3">
+                            <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto">4</div>
+                            <h4 class="font-bold text-slate-900">Refresh & Save Lives</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Enjoy complimentary snacks & juice for 15 minutes before heading home.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. DONOR REGISTRATION MODULE ================= -->
+        <section id="tab-donor" class="tab-content">
+            <div class="bg-slate-900 text-white py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+                    <h1 class="text-3xl font-extrabold">Donor Registration Form</h1>
+                    <p class="text-slate-300 text-sm">Join our database of voluntary blood donors ready to save lives.</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 space-y-8">
+                    
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus text-brand-600"></i> Personal & Medical Details
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Please fill in accurate information to help match with emergency patients.</p>
+                    </div>
+
+                    <form id="donor-form" onsubmit="handleDonorSubmit(event)" class="space-y-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Full Name <span class="text-brand-600">*</span></label>
+                                <input type="text" id="donor-name" required placeholder="e.g. Harini V" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Age -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Age (18 - 65) <span class="text-brand-600">*</span></label>
+                                <input type="number" id="donor-age" required min="18" max="65" placeholder="e.g. 21" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Gender <span class="text-brand-600">*</span></label>
+                                <select id="donor-gender" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white">
+                                    <option value="">Select Gender</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Blood Group -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Blood Group <span class="text-brand-600">*</span></label>
+                                <select id="donor-blood" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white font-bold text-brand-600">
+                                    <option value="">Choose Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Phone Number <span class="text-brand-600">*</span></label>
+                                <input type="tel" id="donor-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Email Address <span class="text-brand-600">*</span></label>
+                                <input type="email" id="donor-email" required placeholder="harini@example.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- City / Location -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">City / Location <span class="text-brand-600">*</span></label>
+                                <input type="text" id="donor-city" required placeholder="e.g. Chennai, Tamil Nadu" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Last Donation Date -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Last Donation Date (If applicable)</label>
+                                <input type="date" id="donor-lastdate" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Consent Checkbox -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                            <input type="checkbox" id="donor-consent" required class="mt-1 w-4 h-4 text-brand-600 focus:ring-brand-500 rounded border-slate-300">
+                            <label for="donor-consent" class="text-xs text-slate-600 leading-relaxed cursor-pointer">
+                                I confirm that I am in good health, meet the eligibility guidelines, and consent to being contacted by LifeFlow blood requestors or administrators in case of emergency need.
+                            </label>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="pt-4 flex flex-col sm:flex-row gap-4">
+                            <button type="submit" class="flex-1 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Submit Registration
+                            </button>
+                            <button type="reset" class="px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl transition-all">
+                                Clear Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. BLOOD REQUEST MODULE ================= -->
+        <section id="tab-request" class="tab-content">
+            <div class="bg-brand-900 text-white py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+                    <h1 class="text-3xl font-extrabold">Emergency Blood Request Form</h1>
+                    <p class="text-rose-200 text-sm">Broadcast your blood requirement to matching registered donors near your location.</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 space-y-8">
+                    
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-square-plus text-brand-600"></i> Patient & Hospital Information
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Provide clear medical details so nearby donors can reach the hospital quickly.</p>
+                    </div>
+
+                    <form id="request-form" onsubmit="handleRequestSubmit(event)" class="space-y-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <!-- Patient Name -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Patient Name <span class="text-brand-600">*</span></label>
+                                <input type="text" id="req-patient" required placeholder="Full name of patient" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Required Blood Group -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Required Blood Group <span class="text-brand-600">*</span></label>
+                                <select id="req-blood" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white font-bold text-brand-600">
+                                    <option value="">Select Required Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+
+                            <!-- Hospital Name -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Hospital Name <span class="text-brand-600">*</span></label>
+                                <input type="text" id="req-hospital" required placeholder="e.g. Apollo Hospital / General Hospital" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- City / Location -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">City / District <span class="text-brand-600">*</span></label>
+                                <input type="text" id="req-city" required placeholder="e.g. Chennai" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Contact Number -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Attendant Contact Phone <span class="text-brand-600">*</span></label>
+                                <input type="tel" id="req-phone" required pattern="[0-9]{10}" placeholder="10-digit phone number" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Units Needed -->
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Units / Pints Needed <span class="text-brand-600">*</span></label>
+                                <input type="number" id="req-units" min="1" max="10" value="1" required class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                            </div>
+
+                            <!-- Urgency Level -->
+                            <div class="space-y-1.5 sm:col-span-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Urgency Level <span class="text-brand-600">*</span></label>
+                                <div class="grid grid-cols-3 gap-3 pt-1">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="urgency" value="Critical Emergency" checked class="peer sr-only">
+                                        <div class="p-3 text-center border rounded-xl peer-checked:bg-red-600 peer-checked:text-white peer-checked:border-red-600 border-slate-300 text-xs font-bold uppercase transition-all">
+                                            🚨 Critical (Immediate)
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="urgency" value="Urgent" class="peer sr-only">
+                                        <div class="p-3 text-center border rounded-xl peer-checked:bg-amber-600 peer-checked:text-white peer-checked:border-amber-600 border-slate-300 text-xs font-bold uppercase transition-all">
+                                            ⚡ Urgent (24 Hours)
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="urgency" value="Normal" class="peer sr-only">
+                                        <div class="p-3 text-center border rounded-xl peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 border-slate-300 text-xs font-bold uppercase transition-all">
+                                            ℹ️ Normal (Scheduled)
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Additional Instructions / Notes</label>
+                            <textarea id="req-notes" rows="3" placeholder="Provide doctor name, room number, or specific component requirements (e.g., Platelets / Single Donor Platelet)" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"></textarea>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="pt-4 flex flex-col sm:flex-row gap-4">
+                            <button type="submit" class="flex-1 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-bullhorn"></i> Post Emergency Request
+                            </button>
+                            <button type="reset" class="px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl transition-all">
+                                Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. CONTACT MODULE ================= -->
+        <section id="tab-contact" class="tab-content">
+            <div class="bg-slate-900 text-white py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+                    <h1 class="text-3xl font-extrabold">Contact & Support</h1>
+                    <p class="text-slate-300 text-sm">Have questions or need immediate assistance? Reach our team 24/7.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid lg:grid-cols-12 gap-10">
+                    
+                    <!-- Contact Cards & Info -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <!-- Emergency Helpline Card -->
+                        <div class="bg-gradient-to-br from-brand-600 to-brand-800 text-white p-8 rounded-3xl shadow-lg space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-phone-volume"></i>
+                            </div>
+                            <h3 class="text-2xl font-black">24/7 Emergency Helpline</h3>
+                            <p class="text-rose-100 text-sm">For urgent blood requirement dispatch or critical donor assistance, call immediately.</p>
+                            <div class="text-3xl font-black tracking-wider bg-white/10 p-4 rounded-2xl text-center border border-white/20">
+                                1800-419-BLOOD
+                            </div>
+                        </div>
+
+                        <!-- Details Box -->
+                        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                            <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Portal Contact Info</h3>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 text-brand-600 flex items-center justify-center shrink-0 text-lg">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">Central Blood Bank Desk</p>
+                                    <p class="text-slate-500 text-xs leading-relaxed">Department of ECE (VLSI & DT), Mini Project Cell, Campus Auditorium, Tamil Nadu, India</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 text-brand-600 flex items-center justify-center shrink-0 text-lg">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">Official Email</p>
+                                    <p class="text-slate-500 text-xs">support@lifeflow-blood.org</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 text-brand-600 flex items-center justify-center shrink-0 text-lg">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">Operating Hours</p>
+                                    <p class="text-slate-500 text-xs">Portal Active 24 Hours / 7 Days a Week</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 space-y-6">
+                            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-paper-plane text-brand-600"></i> Send Us A Message
+                            </h3>
+
+                            <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-bold uppercase text-slate-700">Your Name <span class="text-brand-600">*</span></label>
+                                        <input type="text" id="contact-name" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-bold uppercase text-slate-700">Your Email <span class="text-brand-600">*</span></label>
+                                        <input type="email" id="contact-email" required placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold uppercase text-slate-700">Subject <span class="text-brand-600">*</span></label>
+                                    <input type="text" id="contact-subject" required placeholder="Inquiry / Feedback / Technical Support" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold uppercase text-slate-700">Message <span class="text-brand-600">*</span></label>
+                                    <textarea id="contact-message" required rows="4" placeholder="How can we help you?" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm">
+                                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. FUTURE ADMIN MODULE (PREVIEW) ================= -->
+        <section id="tab-admin" class="tab-content">
+            <div class="bg-amber-950 text-amber-100 py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <span class="bg-amber-800 text-amber-200 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">SRS Module Section 2.3</span>
+                        <h1 class="text-3xl font-extrabold text-white mt-1">Admin Dashboard Preview</h1>
+                        <p class="text-amber-200/80 text-xs sm:text-sm">Future Administrative Record Management & Verification Interface</p>
+                    </div>
+                    <span class="px-4 py-2 rounded-xl bg-amber-900/60 border border-amber-700/50 text-amber-300 text-xs font-mono">
+                        <i class="fa-solid fa-lock mr-1"></i> Admin Privileges Demo Mode
+                    </span>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+                
+                <!-- Admin SRS Notice Banner -->
+                <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-xs text-amber-900 flex items-start gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+                    <div>
+                        <strong>Future Backend Integration Note (SRS 1.2 & 2.3):</strong>
+                        In this frontend-only release, new submissions made via the <em>Donor Register</em> and <em>Request Blood</em> tabs are temporarily updated in the live frontend state below for evaluation purposes.
+                    </div>
+                </div>
+
+                <!-- Admin KPI Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="text-slate-500 text-xs font-semibold uppercase">Total Donors</span>
+                        <div class="text-3xl font-black text-slate-900" id="admin-donor-count">4</div>
+                        <span class="text-[11px] text-emerald-600 font-medium">Verified Active Records</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="text-slate-500 text-xs font-semibold uppercase">Pending Blood Requests</span>
+                        <div class="text-3xl font-black text-brand-600" id="admin-request-count">3</div>
+                        <span class="text-[11px] text-brand-600 font-medium">Requires Match Review</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="text-slate-500 text-xs font-semibold uppercase">Fulfilled Requests</span>
+                        <div class="text-3xl font-black text-emerald-600">142</div>
+                        <span class="text-[11px] text-slate-400">Past 30 Days</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <span class="text-slate-500 text-xs font-semibold uppercase">Emergency Hotline Alerts</span>
+                        <div class="text-3xl font-black text-amber-600">0</div>
+                        <span class="text-[11px] text-slate-400">All Clear Currently</span>
+                    </div>
+                </div>
+
+                <!-- Admin Tabbed Controls: Donors vs Requests -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div class="flex gap-2">
+                            <button onclick="switchAdminSubTab('donors')" id="admin-subtab-donors" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white">
+                                Registered Donors Table
+                            </button>
+                            <button onclick="switchAdminSubTab('requests')" id="admin-subtab-requests" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-200 text-slate-700 hover:bg-slate-300">
+                                Blood Requests Review Table
+                            </button>
+                        </div>
+                        <div class="text-xs text-slate-500 font-mono">
+                            Showing Live State Data
+                        </div>
+                    </div>
+
+                    <!-- Donors Table Subview -->
+                    <div id="admin-view-donors" class="p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[700px]">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
+                                        <th class="p-3 rounded-l-lg">Donor Name</th>
+                                        <th class="p-3">Group</th>
+                                        <th class="p-3">Age/Gender</th>
+                                        <th class="p-3">City</th>
+                                        <th class="p-3">Contact Phone</th>
+                                        <th class="p-3">Last Donated</th>
+                                        <th class="p-3 rounded-r-lg text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-donors-tbody" class="divide-y divide-slate-100 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Requests Table Subview -->
+                    <div id="admin-view-requests" class="p-6 hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[700px]">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
+                                        <th class="p-3 rounded-l-lg">Patient Name</th>
+                                        <th class="p-3">Needed Group</th>
+                                        <th class="p-3">Hospital & City</th>
+                                        <th class="p-3">Units</th>
+                                        <th class="p-3">Urgency</th>
+                                        <th class="p-3">Contact</th>
+                                        <th class="p-3 rounded-r-lg text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-requests-tbody" class="divide-y divide-slate-100 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CONFIRMATION / NOTIFICATION MODAL DIALOG (No alert() used) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl text-center transform transition-all border border-slate-100">
+            <div id="modal-icon-bg" class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto">
+                <i id="modal-icon" class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 id="modal-title" class="text-2xl font-bold text-slate-900">Registration Successful!</h3>
+                <p id="modal-body" class="text-slate-600 text-sm leading-relaxed">
+                    Thank you for joining the LifeFlow donor network. Your details have been recorded.
+                </p>
+            </div>
+            <button onclick="closeModal()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all text-sm">
+                Okay, Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN FOOTER -->
+    <footer class="bg-slate-900 text-white border-t border-slate-800 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand Info -->
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <span class="text-xl font-black text-white">LifeFlow</span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        A voluntary blood donor connectivity platform built for mini project demonstration using modern web technologies.
+                    </p>
+                </div>
+
+                <!-- Navigation Quick Links -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">Quick Modules</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li><a href="#" onclick="switchTab('home')" class="hover:text-brand-400 transition-colors">Home Page</a></li>
+                        <li><a href="#" onclick="switchTab('about')" class="hover:text-brand-400 transition-colors">About & Compatibility</a></li>
+                        <li><a href="#" onclick="switchTab('donor')" class="hover:text-brand-400 transition-colors">Donor Registration Form</a></li>
+                        <li><a href="#" onclick="switchTab('request')" class="hover:text-brand-400 transition-colors">Emergency Blood Request Form</a></li>
+                        <li><a href="#" onclick="switchTab('contact')" class="hover:text-brand-400 transition-colors">Contact Helpline</a></li>
+                    </ul>
+                </div>
+
+                <!-- Blood Groups Quick List -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">Blood Groups</h4>
+                    <div class="grid grid-cols-4 gap-1.5 text-center text-xs">
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">A+</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">A-</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">B+</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">B-</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">O+</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">O-</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">AB+</span>
+                        <span class="bg-slate-800 py-1 rounded text-brand-400 font-bold">AB-</span>
+                    </div>
+                </div>
+
+                <!-- Student Project Credentials Card -->
+                <div class="space-y-3 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400">Student Developer Details</h4>
+                    <div class="text-xs space-y-1 text-slate-300 font-mono">
+                        <p class="font-bold text-white"><i class="fa-solid fa-user-circle mr-1"></i> HARINI.V</p>
+                        <p><i class="fa-solid fa-id-card mr-1"></i> Reg No: 111726115017</p>
+                        <p><i class="fa-solid fa-graduation-cap mr-1"></i> ECE (VLSI & DT) - I YEAR</p>
+                        <p class="text-[10px] text-slate-400 pt-1">FULL STACK MINI PROJECT - 1</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub Footer -->
+            <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 LifeFlow Blood Donation Portal. All Rights Reserved.</p>
+                <p class="flex items-center gap-1">
+                    Designed with <i class="fa-solid fa-heart text-brand-600"></i> using HTML5 & CSS3
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // In-Memory Initial Mock State Data for demonstration
+        const mockDonors = [
+            { id: 1, name: "Harini V", group: "O+", age: 21, gender: "Female", city: "Chennai", phone: "9876543210", lastDate: "2024-01-15", status: "Available" },
+            { id: 2, name: "Karthik Raja", group: "A+", age: 24, gender: "Male", city: "Chennai", phone: "9123456780", lastDate: "2023-11-10", status: "Available" },
+            { id: 3, name: "Priya Sundar", group: "B-", age: 28, gender: "Female", city: "Coimbatore", phone: "9812345678", lastDate: "2024-02-01", status: "Available" },
+            { id: 4, name: "Arun Kumar", group: "O-", age: 30, gender: "Male", city: "Madurai", phone: "9789012345", lastDate: "2023-09-20", status: "Available" }
+        ];
+
+        const mockRequests = [
+            { id: 101, patient: "S. Ramesh", group: "O-", hospital: "Apollo Main Hospital", city: "Chennai", units: 2, urgency: "Critical Emergency", phone: "9444123456", notes: "ICU Ward 4. Immediate requirement." },
+            { id: 102, patient: "Meena K", group: "B+", hospital: "MIOT International", city: "Chennai", units: 1, urgency: "Urgent", phone: "9884011223", notes: "Scheduled surgery tomorrow 9 AM." },
+            { id: 103, patient: "Anand M", group: "A+", hospital: "KMCH Hospital", city: "Coimbatore", units: 3, urgency: "Normal", phone: "9790155443", notes: "Platelets needed." }
+        ];
+
+        // On Page Load Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            renderHomeRequests();
+            renderAdminDonors();
+            renderAdminRequests();
+        });
+
+        // Tab Switching Logic (Home, About, Donor, Request, Contact, Admin)
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            const activeTab = document.getElementById('tab-' + tabId);
+            if(activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            // Update Navigation Button States
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('text-brand-600', 'bg-brand-50');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if(activeBtn && tabId !== 'admin') {
+                activeBtn.classList.remove('text-slate-600');
+                activeBtn.classList.add('text-brand-600', 'bg-brand-50');
+            }
+
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+
+            // Scroll to top of window smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Mobile Navigation Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Home Page Request Cards Renderer
+        function renderHomeRequests() {
+            const container = document.getElementById('home-requests-preview');
+            if(!container) return;
+
+            container.innerHTML = '';
+            
+            mockRequests.slice(0, 3).forEach(req => {
+                const urgencyBadgeClass = req.urgency === 'Critical Emergency' 
+                    ? 'bg-red-100 text-red-700 border-red-200' 
+                    : req.urgency === 'Urgent' 
+                    ? 'bg-amber-100 text-amber-700 border-amber-200' 
+                    : 'bg-blue-100 text-blue-700 border-blue-200';
+
+                const card = `
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 hover:border-brand-500 transition-all">
+                        <div class="flex justify-between items-start">
+                            <span class="w-12 h-12 rounded-xl bg-brand-600 text-white font-black text-xl flex items-center justify-center shadow-md">
+                                ${req.group}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${urgencyBadgeClass}">
+                                ${req.urgency}
+                            </span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base">${req.patient}</h4>
+                            <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-hospital mr-1"></i> ${req.hospital}, ${req.city}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
+                            <span class="text-slate-600">Units: <strong>${req.units} Unit(s)</strong></span>
+                            <button onclick="switchTab('contact')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg transition-all text-xs">
+                                Contact Attendant
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Filter Donors by Blood Group clicked on Home page
+        function filterDonorByGroup(group) {
+            switchTab('admin');
+            switchAdminSubTab('donors');
+            showModal('Blood Group Search', `Filtering donor database preview for blood group: ${group}. (${mockDonors.filter(d => d.group === group).length} exact local matches found).`, 'info');
+        }
+
+        // Handle Donor Registration Form Submit
+        function handleDonorSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('donor-name').value;
+            const age = document.getElementById('donor-age').value;
+            const gender = document.getElementById('donor-gender').value;
+            const blood = document.getElementById('donor-blood').value;
+            const phone = document.getElementById('donor-phone').value;
+            const email = document.getElementById('donor-email').value;
+            const city = document.getElementById('donor-city').value;
+            const lastDate = document.getElementById('donor-lastdate').value || 'N/A';
+
+            // Push to mock donor array
+            const newDonor = {
+                id: mockDonors.length + 1,
+                name: name,
+                group: blood,
+                age: age,
+                gender: gender,
+                city: city,
+                phone: phone,
+                lastDate: lastDate,
+                status: "Available"
+            };
+            mockDonors.unshift(newDonor);
+
+            // Re-render admin donor table
+            renderAdminDonors();
+
+            // Reset Form
+            document.getElementById('donor-form').reset();
+
+            // Show Confirmation Modal
+            showModal(
+                'Registration Successful!',
+                `Thank you, ${name}! You have been successfully registered as a ${blood} blood donor in ${city}. Your contact information will help save lives in emergencies.`,
+                'success'
+            );
+        }
+
+        // Handle Blood Request Form Submit
+        function handleRequestSubmit(event) {
+            event.preventDefault();
+
+            const patient = document.getElementById('req-patient').value;
+            const blood = document.getElementById('req-blood').value;
+            const hospital = document.getElementById('req-hospital').value;
+            const city = document.getElementById('req-city').value;
+            const phone = document.getElementById('req-phone').value;
+            const units = document.getElementById('req-units').value;
+            const notes = document.getElementById('req-notes').value || 'None';
+            const urgency = document.querySelector('input[name="urgency"]:checked').value;
+
+            const newRequest = {
+                id: 100 + mockRequests.length + 1,
+                patient: patient,
+                group: blood,
+                hospital: hospital,
+                city: city,
+                units: units,
+                urgency: urgency,
+                phone: phone,
+                notes: notes
+            };
+
+            mockRequests.unshift(newRequest);
+
+            // Update Home & Admin Renderers
+            renderHomeRequests();
+            renderAdminRequests();
+
+            // Reset Form
+            document.getElementById('request-form').reset();
+
+            // Show Confirmation Modal
+            showModal(
+                'Request Broadcasted!',
+                `Blood request for patient ${patient} (${blood}, ${units} Unit(s)) at ${hospital}, ${city} has been broadcasted to registered ${blood} donors nearby.`,
+                'success'
+            );
+        }
+
+        // Handle Contact Form Submit
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            document.getElementById('contact-form').reset();
+
+            showModal(
+                'Message Delivered',
+                `Thank you ${name}. Your message has been sent to our blood bank coordination team. We will get back to you shortly.`,
+                'success'
+            );
+        }
+
+        // Admin Sub-tab Switcher (Donors vs Requests)
+        function switchAdminSubTab(subTab) {
+            const viewDonors = document.getElementById('admin-view-donors');
+            const viewRequests = document.getElementById('admin-view-requests');
+            const btnDonors = document.getElementById('admin-subtab-donors');
+            const btnRequests = document.getElementById('admin-subtab-requests');
+
+            if(subTab === 'donors') {
+                viewDonors.classList.remove('hidden');
+                viewRequests.classList.add('hidden');
+                btnDonors.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white";
+                btnRequests.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-200 text-slate-700 hover:bg-slate-300";
+            } else {
+                viewDonors.classList.add('hidden');
+                viewRequests.classList.remove('hidden');
+                btnRequests.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-600 text-white";
+                btnDonors.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-200 text-slate-700 hover:bg-slate-300";
+            }
+        }
+
+        // Render Donors in Admin Table
+        function renderAdminDonors() {
+            const tbody = document.getElementById('admin-donors-tbody');
+            const countEl = document.getElementById('admin-donor-count');
+            if(!tbody) return;
+
+            tbody.innerHTML = '';
+            if(countEl) countEl.innerText = mockDonors.length;
+
+            mockDonors.forEach(donor => {
+                const tr = `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3 font-semibold text-slate-900">${donor.name}</td>
+                        <td class="p-3"><span class="px-2 py-1 bg-rose-100 text-brand-700 font-bold rounded text-xs">${donor.group}</span></td>
+                        <td class="p-3 text-slate-600">${donor.age} yrs / ${donor.gender}</td>
+                        <td class="p-3 text-slate-600">${donor.city}</td>
+                        <td class="p-3 font-mono text-xs text-slate-700">${donor.phone}</td>
+                        <td class="p-3 text-xs text-slate-500">${donor.lastDate}</td>
+                        <td class="p-3 text-right">
+                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full text-[10px]">
+                                ${donor.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += tr;
+            });
+        }
+
+        // Render Requests in Admin Table
+        function renderAdminRequests() {
+            const tbody = document.getElementById('admin-requests-tbody');
+            const countEl = document.getElementById('admin-request-count');
+            if(!tbody) return;
+
+            tbody.innerHTML = '';
+            if(countEl) countEl.innerText = mockRequests.length;
+
+            mockRequests.forEach(req => {
+                const urgencyClass = req.urgency === 'Critical Emergency' 
+                    ? 'bg-red-100 text-red-700' 
+                    : req.urgency === 'Urgent' 
+                    ? 'bg-amber-100 text-amber-700' 
+                    : 'bg-blue-100 text-blue-700';
+
+                const tr = `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3 font-semibold text-slate-900">${req.patient}</td>
+                        <td class="p-3"><span class="px-2 py-1 bg-brand-600 text-white font-bold rounded text-xs">${req.group}</span></td>
+                        <td class="p-3 text-slate-600 text-xs">${req.hospital}<br/><span class="text-slate-400">${req.city}</span></td>
+                        <td class="p-3 text-slate-800 font-bold">${req.units}</td>
+                        <td class="p-3"><span class="px-2 py-1 ${urgencyClass} font-bold rounded text-[10px] uppercase">${req.urgency}</span></td>
+                        <td class="p-3 font-mono text-xs text-slate-700">${req.phone}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="fulfillRequest(${req.id})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded transition-all">
+                                Match Donor
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += tr;
+            });
+        }
+
+        // Admin Action: Fulfill Blood Request
+        function fulfillRequest(reqId) {
+            const index = mockRequests.findIndex(r => r.id === reqId);
+            if(index !== -1) {
+                const item = mockRequests.splice(index, 1)[0];
+                renderAdminRequests();
+                renderHomeRequests();
+                showModal('Donor Match Simulated', `Successfully matched registered donor for patient request ${item.patient} (${item.group}).`, 'success');
+            }
+        }
+
+        // Custom UI Modal Launcher (Replaces prohibited alert())
+        function showModal(title, message, type = 'success') {
+            const modal = document.getElementById('custom-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalIconBg = document.getElementById('modal-icon-bg');
+            const modalIcon = document.getElementById('modal-icon');
+
+            modalTitle.innerText = title;
+            modalBody.innerText = message;
+
+            if(type === 'success') {
+                modalIconBg.className = "w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto";
+                modalIcon.className = "fa-solid fa-circle-check";
+            } else {
+                modalIconBg.className = "w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl mx-auto";
+                modalIcon.className = "fa-solid fa-circle-info";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
